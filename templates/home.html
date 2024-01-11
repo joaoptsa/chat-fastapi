@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>ChatApp</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        body {
+            background-color: #f0f0f0; /* Cor de fundo suave */
+            font-family: 'Arial', sans-serif; /* Fonte padrão */
+        }
+
+        .card {
+            position: absolute;
+            width: 400px;
+            height: 300px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Sombra mais suave */
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #ffffff; /* Cor de fundo branca */
+            border-radius: 10px; /* Cantos arredondados */
+        }
+
+        #user-form {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center; /* Centralizar o texto */
+        }
+
+        #user-form input {
+            width: 70%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc; /* Borda cinza clara */
+            border-radius: 5px; /* Cantos arredondados */
+        }
+
+        #user-form button {
+            width: 70%;
+            padding: 10px;
+            background-color: #007bff; /* Cor de fundo azul */
+            color: #ffffff; /* Cor do texto branca */
+            border: none;
+            border-radius: 5px; /* Cantos arredondados */
+            cursor: pointer;
+        }
+
+        #user-form button:hover {
+            background-color: #0056b3; /* Cor de fundo azul mais escura ao passar o mouse */
+        }
+
+        .error_message {
+            display: none;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+
+    </style>
+    
+    <script>
+        function startChat() {
+            var currentUser = $("#user_input").val();
+            if (currentUser) {
+                var data = { "username": currentUser };
+                $.ajax({
+                    url: '/api/register',
+                    type: 'POST',
+                    contentType: 'application/json;charset=UTF-8',
+                    data: JSON.stringify(data),
+                    success: function (response, textStatus, xhr) {
+                        console.log("Success function is being called");
+                        console.log("Response content:", response.content);
+                        if (xhr.status === 200) {
+                            // Redirecionar para chat.html com o conteúdo do nome de usuário
+                            console.log("Redirecting to chat.html");
+                            window.location.href = "/chat?username=" + currentUser;
+                        }
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        console.error("Erro durante o registro");
+                        $("#user_input").val("");
+                        if (xhr.status === 400 && xhr.responseJSON && xhr.responseJSON.content === "false") {
+                            console.log("Showing error message");
+                            $(".error_message").show();
+                        } else {
+                            console.error("Unexpected server response");
+                        }
+                        console.error("Error Function");
+                        console.error("XHR Status:", xhr.status);
+                        console.error("Text Status:", textStatus);
+                        console.error("Error Thrown:", errorThrown);
+                    }
+                });
+            }}
+
+
+    </script>
+
+</head>
+
+<body>
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title text-center">Chat App</h4>
+            <hr>
+
+            <form id="user-form">
+                <input type="text" class="form-control" id="user_input" placeholder="Enter your name">
+                <button id="start" type="button" class="btn btn-primary" onclick="startChat()">Start Chat</button>
+            </form>
+                    <br><br><br><br><br>
+            <div class="error_message">Invalid username. Please enter another nickname.</div>
+        </div>
+    </div>
+</body>
+
+</html>
+
+
+
+</html>
