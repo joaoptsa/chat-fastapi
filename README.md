@@ -12,11 +12,11 @@
 
 <h3>How to Run</h3><br>
 
-      pip install -r requirements.txt
+    pip install -r requirements.txt
 
 <br> 
       
-       uvicorn main:app --reload
+    uvicorn main:app --reload
 
 
 <br>
